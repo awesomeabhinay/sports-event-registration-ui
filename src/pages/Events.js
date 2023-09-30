@@ -3,12 +3,16 @@ import { Container, Grid, Button } from "@mui/material";
 import EventCard from "../components/EventCard";
 import axios from "axios";
 import useUser from "../hooks/useUser";
+import { Alert } from "@mui/material";
 
 const Events = () => {
     const { user } = useUser();
     const [eventList, setEventList] = useState([]);
     const [registeredEvents, setRegisteredEvents] = useState([]);
     const username = localStorage.getItem('username');
+    const [error, setError] = useState(null);
+
+    const maxHeight = window.innerHeight - 200;
     // Function to register an event by making a backend API call
     const registerEvent = async (event) => {
         try {
@@ -25,6 +29,7 @@ const Events = () => {
             setRegisteredEvents(updatedRegisteredEvents);
         } catch (error) {
             console.error("Error registering event:", error);
+            setError(error);
         }
     };
 
@@ -39,7 +44,6 @@ const Events = () => {
                     eventId: event.id,
                 },
             });
-
 
             // Update the local state
             const updatedRegisteredEvents = registeredEvents.filter((e) => e.id !== event.id);
@@ -72,16 +76,17 @@ const Events = () => {
     return (
         <Container>
             <Grid container spacing={2}>
-                <Grid item xs={12} md={6}>
+                <Grid item xs={12} md={8}>
                     <h2>Event List</h2>
-                    {eventList.map((event) => (
-                        <div key={event.id}>
-                            <EventCard event={event} onRegister={registerEvent} />
-
-                        </div>
-                    ))}
+                    <div className="scrollable-container" style={{ maxHeight: `${maxHeight}px` }}>
+                        {eventList.map((event) => (
+                            <div key={event.id}>
+                                <EventCard event={event} onRegister={registerEvent} />
+                            </div>
+                        ))}
+                    </div>
                 </Grid>
-                <Grid item xs={12} md={6}>
+                <Grid item xs={12} md={4}>
                     <h2>Registered Events</h2>
                     {registeredEvents.map((event) => (
                         <div key={event.id}>
@@ -90,6 +95,9 @@ const Events = () => {
                     ))}
                 </Grid>
             </Grid>
+            {error &&
+                <Alert severity="error" onClose={() => { setError(null) }}>This is a error alert</Alert>
+            }
         </Container>
     );
 }

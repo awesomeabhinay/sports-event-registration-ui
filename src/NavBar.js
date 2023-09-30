@@ -5,7 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import useUser from './hooks/useUser';
 
 const NavBar = () => {
-    const { user, logout } = useUser();
+    const { logout } = useUser();
 
     const navigate = useNavigate();
 
@@ -14,6 +14,7 @@ const NavBar = () => {
         navigate("/");
         logout();
     };
+    const user = localStorage.getItem("username");
     return (
         <AppBar position="static">
             <Toolbar>
