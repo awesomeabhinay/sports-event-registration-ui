@@ -19,12 +19,10 @@ const Login = () => {
                 }
             );
             const currUsername = currUser.data.username;
-            console.log("handle User: ", currUsername);
 
             localStorage.setItem('username', currUsername);
             navigate("/events");
         } catch (e) {
-            console.log(e);
             setError(e.response?.data || 'An error occurred during Login.');
         }
     };

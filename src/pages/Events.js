@@ -11,6 +11,7 @@ const Events = () => {
     const [registeredEvents, setRegisteredEvents] = useState([]);
     const username = localStorage.getItem('username');
     const [error, setError] = useState(null);
+    const [successMessage, setSuccessMessage] = useState('');
 
     const maxHeight = window.innerHeight - 200;
     // Function to register an event by making a backend API call
@@ -27,17 +28,15 @@ const Events = () => {
             const updatedRegisteredEvents = [...registeredEvents, event];
             setEventList(updatedEventList);
             setRegisteredEvents(updatedRegisteredEvents);
+            setSuccessMessage(`Successfully registered for event: ${event.eventName}`);
         } catch (error) {
             console.error("Error registering event:", error.response?.data);
             setError(error.response?.data);
         }
     };
 
-    // Function to unregister an event by making a backend API call
     const unregisterEvent = async (event) => {
         try {
-            // Make the API call to unregister the event
-            console.log(event.id);
             const response = await axios.delete("/event/unregister", {
                 data: {
                     username: username,
@@ -50,6 +49,7 @@ const Events = () => {
             const updatedEventList = [...eventList, event];
             setRegisteredEvents(updatedRegisteredEvents);
             setEventList(updatedEventList);
+            setSuccessMessage(`Successfully unregistered for event: ${event.eventName}`);
         } catch (error) {
             console.error("Error unregistering event:", error);
         }
@@ -97,6 +97,11 @@ const Events = () => {
             </Grid>
             {error &&
                 <Alert severity="error" onClose={() => { setError(null) }}>{error}</Alert>
+            }
+            {successMessage &&
+                <Alert severity="success" style={{ marginTop: '16px' }} onClose={() => { setSuccessMessage(null) }}>
+                    {successMessage}
+                </Alert>
             }
         </Container>
     );
