@@ -1,19 +1,21 @@
 import React, { useState } from 'react';
 import { Card, CardContent, TextField, Button, Typography } from '@mui/material';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { Link } from "react-router-dom";
 import useUser from '../hooks/useUser';
+import { Alert } from '@mui/material';
 
 const Signup = () => {
     const { user } = useUser();
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [error, setError] = useState('');
-
-    const navigate = useNavigate();
+    const [successMessage, setSuccessMessage] = useState('');
 
     const handleSignup = async () => {
         try {
+            setError(null);
+            setSuccessMessage(null);
             const newUser = await axios.post(
                 '/create/user',
                 {
@@ -21,7 +23,7 @@ const Signup = () => {
                     email: email,
                 }
             );
-            navigate("/");
+            setSuccessMessage(`Signup successful for user: ${username}`);
         } catch (e) {
             setError(e.response?.data || 'An error occurred during signup.');
         }
@@ -57,6 +59,11 @@ const Signup = () => {
                         <Typography color="error" variant="h6" gutterBottom>
                             *{error}
                         </Typography>}
+                    {successMessage &&
+                        <Alert severity="success" style={{ marginTop: '16px' }}>
+                            <p>{successMessage} Please <Link to="/login">log in</Link></p>
+                        </Alert>
+                    }
                 </CardContent>
             </Card>
         </div>
