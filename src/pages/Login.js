@@ -24,7 +24,8 @@ const Login = () => {
             localStorage.setItem('username', currUsername);
             navigate("/events");
         } catch (e) {
-            setError(e.response?.data?.message || 'An error occurred during Login.');
+            console.log(e);
+            setError(e.response?.data || 'An error occurred during Login.');
         }
     };
 

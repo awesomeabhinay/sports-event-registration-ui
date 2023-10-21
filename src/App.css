@@ -2,3 +2,11 @@
   flex: 1;
   overflow-y: auto;
 }
+
+body {
+  background-image: url('static/sports_day.jpeg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  /* opacity: 0.2; */
+}

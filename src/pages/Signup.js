@@ -23,7 +23,7 @@ const Signup = () => {
             );
             navigate("/");
         } catch (e) {
-            setError(e.response?.data?.message || 'An error occurred during signup.');
+            setError(e.response?.data || 'An error occurred during signup.');
         }
     };
 
