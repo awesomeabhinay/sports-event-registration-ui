@@ -35,7 +35,7 @@ const EventCard = ({ event, onRegister, onUnregister }) => {
                     <div>
                         {onRegister && (
                             <Button variant="contained" color="primary" onClick={() => onRegister(event)}>
-                                Select
+                                Register
                             </Button>
                         )}
                         {onUnregister && (
