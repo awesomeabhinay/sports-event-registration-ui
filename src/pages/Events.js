@@ -28,8 +28,8 @@ const Events = () => {
             setEventList(updatedEventList);
             setRegisteredEvents(updatedRegisteredEvents);
         } catch (error) {
-            console.error("Error registering event:", error);
-            setError(error);
+            console.error("Error registering event:", error.response?.data);
+            setError(error.response?.data);
         }
     };
 
@@ -96,7 +96,7 @@ const Events = () => {
                 </Grid>
             </Grid>
             {error &&
-                <Alert severity="error" onClose={() => { setError(null) }}>This is a error alert</Alert>
+                <Alert severity="error" onClose={() => { setError(null) }}>{error}</Alert>
             }
         </Container>
     );
