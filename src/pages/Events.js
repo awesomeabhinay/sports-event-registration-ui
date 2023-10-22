@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import { Container, Grid, Button } from "@mui/material";
 import EventCard from "../components/EventCard";
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 import useUser from "../hooks/useUser";
 import { Alert } from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const Events = () => {
     const { user } = useUser();
@@ -12,39 +14,49 @@ const Events = () => {
     const username = localStorage.getItem('username');
     const [error, setError] = useState(null);
     const [successMessage, setSuccessMessage] = useState('');
+    const [loading, setLoading] = useState(false);
+
+    const navigate = useNavigate();
 
     const maxHeight = window.innerHeight - 200;
-    // Function to register an event by making a backend API call
+
+    const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
     const registerEvent = async (event) => {
+        setLoading(true);
         try {
-            // Make the API call to register the event
             await axios.post(`/event/register`, {
                 eventId: event.id,
                 username: username,
             });
+            setLoading(false);
 
-            // Update the local state
             const updatedEventList = eventList.filter((e) => e.id !== event.id);
             const updatedRegisteredEvents = [...registeredEvents, event];
             setEventList(updatedEventList);
             setRegisteredEvents(updatedRegisteredEvents);
             setSuccessMessage(`Successfully registered for event: ${event.eventName}`);
         } catch (error) {
+            setLoading(true)
+            await delay(1000);
             console.error("Error registering event:", error.response?.data);
             setError(error.response?.data);
+            setLoading(false);
         }
     };
 
     const unregisterEvent = async (event) => {
         try {
+            setLoading(true);
             const response = await axios.delete("/event/unregister", {
                 data: {
                     username: username,
                     eventId: event.id,
                 },
             });
+            await delay(1000);
+            setLoading(false);
 
-            // Update the local state
             const updatedRegisteredEvents = registeredEvents.filter((e) => e.id !== event.id);
             const updatedEventList = [...eventList, event];
             setRegisteredEvents(updatedRegisteredEvents);
@@ -52,23 +64,30 @@ const Events = () => {
             setSuccessMessage(`Successfully unregistered for event: ${event.eventName}`);
         } catch (error) {
             console.error("Error unregistering event:", error);
+            setLoading(false);
         }
     };
 
     useEffect(() => {
         const loadEventList = async () => {
-            const eventListResponse = await axios.get(`/events/all`);
-            const allEvents = eventListResponse.data;
+            try {
+                const eventListResponse = await axios.get(`/events/all`);
+                const allEvents = eventListResponse.data;
 
-            const username = localStorage.getItem('username')
-            const registeredEventsResponse = await axios.get(`/events/${username}`)
-            const registeredEvents = registeredEventsResponse.data;
+                const username = localStorage.getItem('username')
+                const registeredEventsResponse = await axios.get(`/events/${username}`)
+                const registeredEvents = registeredEventsResponse.data;
 
-            const unregisteredEvents = allEvents.filter(event => {
-                return !registeredEvents.some(registeredEvent => registeredEvent.id === event.id);
-            });
-            setEventList(unregisteredEvents);
-            setRegisteredEvents(registeredEvents);
+                const unregisteredEvents = allEvents.filter(event => {
+                    return !registeredEvents.some(registeredEvent => registeredEvent.id === event.id);
+                });
+                setEventList(unregisteredEvents);
+                setRegisteredEvents(registeredEvents);
+            } catch (error) {
+                localStorage.removeItem('username');
+                navigate('/')
+            }
+
         }
         loadEventList();
     }, []);
@@ -95,6 +114,11 @@ const Events = () => {
                     ))}
                 </Grid>
             </Grid>
+            {loading && (
+                <div className="loading-overlay">
+                    <CircularProgress />
+                </div>
+            )}
             {error &&
                 <Alert severity="error" onClose={() => { setError(null) }}>{error}</Alert>
             }
