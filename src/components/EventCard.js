@@ -19,7 +19,14 @@ const EventCard = ({ event, onRegister, onUnregister }) => {
     return (
         <Card variant="outlined" spacing={4}>
             <CardContent>
-                <Typography variant="h6">{event.eventName}</Typography>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <Typography variant="h6">{event.eventName}</Typography>
+                    {onRegister && event.currentRegistrationCount !== undefined && (
+                        <Typography variant="body2" color="textSecondary">
+                            Registered: {event.currentRegistrationCount} / {event.maxRegistrationLimit}
+                        </Typography>
+                    )}
+                </div>
                 <div className="row">
                     <div className="d-flex">
                         <Typography variant="body2" color="textSecondary">
@@ -34,9 +41,15 @@ const EventCard = ({ event, onRegister, onUnregister }) => {
                     </div>
                     <div>
                         {onRegister && (
-                            <Button variant="contained" color="primary" onClick={() => onRegister(event)}>
+                            <Button variant="contained" color="primary" onClick={() => onRegister(event)}
+                                disabled={event.maxRegistrationLimit === event.currentRegistrationCount}>
                                 Register
                             </Button>
+                        )}
+                        {onRegister && event.maxRegistrationLimit === event.currentRegistrationCount && (
+                            <Typography variant="body2" color="error">
+                                Sorry, this event cannot be registered more. Max limit reached.
+                            </Typography>
                         )}
                         {onUnregister && (
                             <Button variant="outlined" color="secondary" onClick={() => onUnregister(event)}>
