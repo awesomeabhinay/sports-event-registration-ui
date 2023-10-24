@@ -2,11 +2,9 @@ import React, { useState } from 'react';
 import { Card, CardContent, TextField, Button, Typography } from '@mui/material';
 import axios from 'axios';
 import { Link } from "react-router-dom";
-import useUser from '../hooks/useUser';
 import { Alert } from '@mui/material';
 
 const Signup = () => {
-    const { user } = useUser();
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [error, setError] = useState('');

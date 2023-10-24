@@ -2,11 +2,9 @@ import React, { useState } from 'react';
 import { Card, CardContent, TextField, Button, Typography } from '@mui/material';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import useUser from '../hooks/useUser';
 
 const Login = () => {
     const [username, setUsername] = useState('');
-    const { user, login } = useUser();
     const [error, setError] = useState('');
 
     const navigate = useNavigate();

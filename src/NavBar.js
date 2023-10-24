@@ -2,16 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 
-import useUser from './hooks/useUser';
-
 const NavBar = () => {
-    const { logout } = useUser();
 
     const navigate = useNavigate();
-
     const handleLogout = () => {
         navigate("/");
-        logout();
+        localStorage.removeItem('username');
     };
     const user = localStorage.getItem("username");
     return (

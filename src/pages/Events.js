@@ -3,12 +3,10 @@ import { Container, Grid, Button } from "@mui/material";
 import EventCard from "../components/EventCard";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
-import useUser from "../hooks/useUser";
 import { Alert } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 
 const Events = () => {
-    const { user } = useUser();
     const [eventList, setEventList] = useState([]);
     const [registeredEvents, setRegisteredEvents] = useState([]);
     const username = localStorage.getItem('username');
