@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Container, Grid, Button } from "@mui/material";
-import EventCard from "../components/EventCard";
+import EventCard from "./EventCard";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 import { Alert } from "@mui/material";
