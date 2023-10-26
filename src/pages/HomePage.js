@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Grid, Container, Box } from "@mui/material"; // Import Box from MUI
+import { Grid, Container, Box } from "@mui/material";
 
 const HomePage = () => {
     const username = localStorage.getItem('username');
@@ -11,7 +11,7 @@ const HomePage = () => {
             flexDirection="column"
             alignItems="center"
             minHeight="100vh"
-            textAlign="center" // Center the text horizontally
+            textAlign="center" 
         >
             <Container>
                 <Grid container spacing={2}>
