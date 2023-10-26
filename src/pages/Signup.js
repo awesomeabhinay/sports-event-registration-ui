@@ -10,10 +10,20 @@ const Signup = () => {
     const [error, setError] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
 
+
+    const isEmailValid = (email) => {
+        const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+        return emailRegex.test(email);
+    };
+
     const handleSignup = async () => {
         try {
             setError(null);
             setSuccessMessage(null);
+            if (!isEmailValid(email)) {
+                setError('Invalid email format. Please enter a valid email address.');
+                return;
+            }
             const newUser = await axios.post(
                 '/create/user',
                 {
